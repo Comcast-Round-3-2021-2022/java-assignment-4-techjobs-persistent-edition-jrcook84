@@ -15,9 +15,19 @@ import java.util.Optional;
 @RequestMapping("employers")
 public class EmployerController {
 
-@Autowired
+
+    @Autowired
+   // private field of ER type @autoWired allows employerRepository to get rows of a table in the database
     private EmployerRepository employerRepository;
-@RequestMapping("")
+// handles request at the root
+@GetMapping("")
+public String displayAllEmployers (Model model) {
+    //if title is not null first model renders all employers in fragments
+   model.addAttribute("title", "All Employers");
+   // uses name provided by index, finds all employers in repo
+   model.addAttribute("employers", employerRepository.findAll());
+   return "employers/index";
+}
 
     @GetMapping("add")
     public String displayAddEmployerForm(Model model) {
@@ -32,14 +42,15 @@ public class EmployerController {
         if (errors.hasErrors()) {
             return "employers/add";
         }
-
+      // if information is valid it is saved to the repo
+        employerRepository.save(newEmployer);
         return "redirect:";
     }
 
     @GetMapping("view/{employerId}")
     public String displayViewEmployer(Model model, @PathVariable int employerId) {
-
-        Optional optEmployer = null;
+            //uses employers id field to get correct info from repo had to set repo to find by id variable provided by parameters
+        Optional optEmployer = employerRepository.findById(employerId);
         if (optEmployer.isPresent()) {
             Employer employer = (Employer) optEmployer.get();
             model.addAttribute("employer", employer);
