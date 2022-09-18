@@ -21,7 +21,7 @@ public class EmployerController {
     private EmployerRepository employerRepository;
 // handles request at the root
 @GetMapping("")
-public String displayAllEmployers (Model model) {
+public String index (Model model) {
     //if title is not null first model renders all employers in fragments
    model.addAttribute("title", "All Employers");
    // uses name provided by index, finds all employers in repo
@@ -54,6 +54,8 @@ public String displayAllEmployers (Model model) {
         if (optEmployer.isPresent()) {
             Employer employer = (Employer) optEmployer.get();
             model.addAttribute("employer", employer);
+            model.addAttribute("title", "Edit Employer " +
+                    employer.getName() + "(id="+ employer.getId() + ")");
             return "employers/view";
         } else {
             return "redirect:../";

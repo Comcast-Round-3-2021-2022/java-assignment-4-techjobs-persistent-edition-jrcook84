@@ -20,7 +20,7 @@ public class SkillController {
     private SkillRepository skillRepository;
 // index
 @GetMapping("")
-public String displayAllSkills (Model model) {
+public String index (Model model) {
     //if title is not null first model renders all jobs in fragments
    model.addAttribute("title", "skills");
     // uses name provided by index, finds all jobs in repo
