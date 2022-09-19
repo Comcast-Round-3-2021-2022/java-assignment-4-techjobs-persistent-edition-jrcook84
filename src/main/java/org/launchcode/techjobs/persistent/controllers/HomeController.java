@@ -1,5 +1,6 @@
 package org.launchcode.techjobs.persistent.controllers;
 
+import org.launchcode.techjobs.persistent.models.Employer;
 import org.launchcode.techjobs.persistent.models.Job;
 import org.launchcode.techjobs.persistent.models.Skill;
 import org.launchcode.techjobs.persistent.models.data.EmployerRepository;
@@ -54,13 +55,17 @@ public class HomeController {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Job");
             return "add";
-        }else{
+        }
            // finds value of request by using employer id/ employer repo
-            model.addAttribute("employer", employerRepository.findById(employerId));
-            // gets skill data from a list of ids
+            Optional optEmployer = employerRepository.findById(employerId);
+            if (optEmployer.isPresent()) {
+                Employer employer = (Employer) optEmployer.get();
+                newJob.setEmployer(employer);
+                // gets skill data from a list of ids
+            }
             List<Skill> skillObjs = (List<Skill>) skillRepository.findAllById(skills);
             newJob.setSkills(skillObjs);
-        }
+
 
         jobRepository.save(newJob);
 
